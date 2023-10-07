@@ -1,0 +1,16 @@
+package-lock.json
+yarn.lock
+coverage
+.idea/*
+node_modules
+.DS_Store
+bundle-stats.html
+
+.vscode
+__diff_output__
+dist
+build
+*.txt
+
+*.log
+*.tsbuildinfo

@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Onest', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  height: 100vh;
+  background-color: #FFF;
+}
+
+.main {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.items {
+  background-color: #C62E65;
+  padding: 1rem;
+
+}
+
+.items>h2 {
+  color: #FFF;
+  font-size: x-large;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.items>div {
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: #FFF;
+  box-shadow: 0 0 10px -3px rgba(0, 0, 0, 0.3);
+}
+
+.items:nth-child(2) {
+  background-color: #624763;
+  border-width: 0 0 0 4px;
+  border-style: dashed;
+  border-color: #FFF;
+}
+
+/* BTNS */
+.wrap-btn {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.btn {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: transparent;
+}
+.btn span {
+  display: contents;
+}
+.btn-case {
+  background-color: #2F1847;
+  color: #FFF;
+  padding: 8px;
+  border-radius: 4px;
+}
