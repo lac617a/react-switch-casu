@@ -31,7 +31,7 @@ Using pnpm:
 $ pnpm add react-switch-casu
 ```
 
-## A simple `switch-case` react package for managing control flow, it acts a bit like `react-router` Switch component, but has several use cases outside of just rendering
+### A simple `switch-case` react package for managing control flow, it acts a bit like `react-router` Switch component, but has several use cases outside of just rendering
 
 ```javascript
 import React from "react";
@@ -55,7 +55,7 @@ function SwitchCaseSimpleExample() {
 }
 ```
 
-## This is the basic syntax for a `Switch` statement with the `expression` condition
+### This is the basic syntax for a `Switch` statement with the `expression` condition
 
 ```javascript
 import React from "react";
@@ -95,7 +95,7 @@ With the `Switch` statements they can have a cleaner syntax than the
 complicated `ternary` or `if else` statements, which are sometimes a
 little cumbersome to understand.
 
-## The current syntax for something like this could look like this
+### The current syntax for something like this could look like this
 
 ```javascript
 return (

@@ -1,7 +1,7 @@
 import { Children, useId, ReactElement, ReactNode, cloneElement } from "react";
 import { Props, Conditiontype, Conditionstype, PropsOnlyOneChild } from "./types";
 
-const generateKey = (prexi: string) => {
+const generateKey = (prexi?: string | null) => {
   return `${prexi}_${new Date().getTime()}`;
 }
 
@@ -11,7 +11,7 @@ function Switch({ expression, children }: Props<Conditionstype>) {
 
   const mapperChildrens = (validated?: boolean) =>
     Children.forEach(children, (child: ReactElement<Conditiontype & Conditionstype>) => {
-      const keys = { key: generateKey(useId()) };
+      const keys = { key: generateKey(child.key) };
       if (!matchChild && child.type === Case) {
         const { condition } = child.props;
 
