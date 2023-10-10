@@ -8,16 +8,21 @@ const packageJson = require("./package.json");
 export default [
   {
     input: "src/lib/index.ts",
+    external: Object.keys(packageJson.peerDependencies),
     output: [
       {
         file: packageJson.main,
         format: "cjs",
-        sourcemap: true,
       },
       {
         file: packageJson.module,
         format: "esm",
+      },
+      {
+        file: "dist/react-switch-casu.min.js",
+        format: "umd",
         sourcemap: true,
+        name: "react-switch-casu",
       },
     ],
     plugins: [
