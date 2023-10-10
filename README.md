@@ -1,8 +1,8 @@
-# A Switch Case component for React
+# Simplify conditional rendering in react
 
 [![Version][version-badge]][npm]
 [![Downloads][downloads-badge]][npm]
-[![GitHub stars](https://img.shields.io/github/stars/markusenglund/react-switch-casu.svg?style=social&label=Stars)](https://github.com/markusenglund/react-switch-casu)
+[![GitHub stars](https://img.shields.io/github/stars/lac617a/react-switch-casu.svg?style=social&label=Stars)](https://github.com/lac617a/react-switch-casu)
 [![gzip size](http://img.badgesize.io/https://unpkg.com/react-switch-casu/dist/react-switch-casu.min.js?compression=gzip)](https://unpkg.com/react-switch-casu/dist/react-switch-casu.min.js)
 
 [![MIT License][license-badge]](LICENSE.md)
@@ -31,51 +31,71 @@ Using pnpm:
 $ pnpm add react-switch-casu
 ```
 
-### A simple `switch-case` react package for managing control flow, it acts a bit like `react-router` Switch component, but has several use cases outside of just rendering
+## What is it, and what it does?
 
-```javascript
+It is a simple package that provides multiple utility components for simplifying conditional rendering in react. By using this package you can make your code more readable and maintainable as shown below.
+
+1. `Switch`
+    * Wrapper component for `Case` and `Default`.
+    * It takes an expression as a prop.
+    * It also takes two  optional  boolean props `fallthrough` and `enableMemo`.
+    * By default both 'fallthrough' and 'enableMemo' are false.
+    * After enabling memo feature, it will only re-render if the expression changes.
+    * After enabling fallthrough you will need to pass a boolean `break` in the `Case` component wherever you want to
+      stop fallthrough.
+    * Anything else outside of `Case` and `Default` will be ignored.
+2. `Case`
+    * Must be used inside `Switch`.
+    * It takes a `conditional` as a prop.
+    * Must contain children/child.
+    * Optional boolean prop `break` if fallthrough is enabled in `Switch`.
+3. `Default`
+   * Must be used inside `Switch`.
+   * Must contain children/child.
+
+```jsx
 import React from "react";
 import Switch from "react-switch-casu";
 
 function SwitchCaseSimpleExample() {
-    const [show, setShow] = useState(false)
-    return (
-      <Switch>
-        <Switch.Case condition={show}>
-          {/* here your login component  */}
-        </Switch.Case>
-        <Case condition={!show}>
-          {/* here your register component  */}
-        </Case>
-        <Switch.Default>
-          <h1>Welcome to Home</h1>
-        </Switch.Default>
-      </Switch>
-    );
+  const [show, setShow] = useState(false)
+  return (
+    <Switch>
+      <Switch.Case condition={show}>
+        {/* here your login component  */}
+      </Switch.Case>
+      <Switch.Case condition={!show}>
+        {/* here your register component  */}
+      </Switch.Case>
+      <Switch.Default>
+        <h1>Welcome to Home</h1>
+      </Switch.Default>
+    </Switch>
+  );
 }
 ```
 
 ### This is the basic syntax for a `Switch` statement with the `expression` condition
 
-```javascript
+```jsx
 import React from "react";
 import Switch from "react-switch-casu";
 
 function SwitchCaseExpressionExample() {
-    const [expression, setExpression] = useState(3)
-    return (
-      <Switch expression={expression}>
-        <Switch.Case condition={1}>
-          {/* here your login component  */}
-        </Switch.Case>
-        <Case condition={2}>
-          {/* here your register component  */}
-        </Case>
-        <Switch.Default>
-          <h1>Welcome to Home</h1>
-        </Switch.Default>
-      </Switch>
-    );
+  const [expression, setExpression] = useState(3)
+  return (
+    <Switch expression={expression}>
+      <Switch.Case condition={1}>
+        {/* here your login component  */}
+      </Switch.Case>
+      <Switch.Case condition={2}>
+        {/* here your register component  */}
+      </Switch.Case>
+      <Switch.Default>
+        <h1>Welcome to Home</h1>
+      </Switch.Default>
+    </Switch>
+  );
 }
 ```
 
@@ -94,6 +114,31 @@ default `Default`.
 With the `Switch` statements they can have a cleaner syntax than the
 complicated `ternary` or `if else` statements, which are sometimes a
 little cumbersome to understand.
+
+### `Switch` fallthrough example
+
+```jsx
+import React from "react";
+import Switch from "react-switch-casu";
+
+function SwitchCaseExpressionExample() {
+  const [weekDayNo, setWeekDayNo] = useState(3)
+  return (
+    <Switch expression={weekDayNo} fallthrough>
+      <Switch.Case condition={1}>Monday</Switch.Case>
+      <Switch.Case condition={2}>Tuesday</Switch.Case>
+      <Switch.Case condition={3}>Wednesday</Switch.Case>
+      <Switch.Case condition={4}>Thursday</Switch.Case>
+      <Switch.Case condition={5}>Friday</Switch.Case>
+      <Switch.Case condition={6}>Saturday</Switch.Case>
+      <Switch.Case condition={7} break>Sunday</Switch.Case>
+      <Switch.Default>
+        week day number must be between 1 and 7
+      </Switch.Default>
+    </Switch>
+  );
+}
+```
 
 ### The current syntax for something like this could look like this
 
