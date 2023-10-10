@@ -1,7 +1,7 @@
 {
   "name": "react-switch-casu",
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "types": "dist/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -59,8 +59,7 @@
   },
   "peerDependencies": {
     "react": ">= 16.8.0",
-    "react-dom": ">= 16.8.0",
-    "tslib": "2.0.0"
+    "react-dom": ">= 16.8.0"
   },
   "resolutions": {
     "@types/react": "^17.0.0",
@@ -70,7 +69,7 @@
     "files": [
       {
         "path": "./dist/react-switch-casu.min.js",
-        "maxSize": "11.5kB"
+        "maxSize": "3.5kB"
       }
     ]
   },
