@@ -1,49 +1,62 @@
-import { Children, useId, ReactElement, ReactNode, cloneElement } from "react";
-import { Props, Conditiontype, Conditionstype, PropsOnlyOneChild } from "./types";
+import React, { memo, Children, useEffect, useState, ReactNode } from "react";
+import { Props, Conditionstype } from "./types";
 
-const generateKey = (prexi?: string | null) => {
-  return `${prexi}_${new Date().getTime()}`;
-}
+import Case from "./Case";
+import Default from "./Default";
+import { pushItemsToArray } from "./utils";
 
-function Switch({ expression, children }: Props<Conditionstype>) {
-  let matchChild: ReactNode = null;
-  let defaultCase: ReactNode = null;
+const Switch = ({ expression, fallthrough, children }: Props<Conditionstype>) => {
+  const [childrenToBeRendered, setChildrenToBeRendered] = useState<ReactNode[]>([]);
 
-  const mapperChildrens = (validated?: boolean) =>
-    Children.forEach(children, (child: ReactElement<Conditiontype & Conditionstype>) => {
-      const keys = { key: generateKey(child.key) };
-      if (!matchChild && child.type === Case) {
-        const { condition } = child.props;
+  useEffect(() => {
+    if (children && Array.isArray(children)) {
+      const childrenArray = Children.toArray(children);
+      let newChildrenArr: ReactNode[] | undefined = [];
+      let defaultChildren: ReactNode[] | undefined = [];
+      let expressionMatched = false;
+      let breakReached = false;
 
-        const conditionResult = validated
-          ? typeof condition === "boolean" && Boolean(condition)
-          : expression === condition;
+      if (Array.isArray(childrenArray)) {
+        // push cases which satisfies the expression to state
+        childrenArray.forEach((child: any) => {
+          if (Object.is(Case, child.type) && child.type.name === Case.name) {
+            // handle case value match case
+            const { condition } = child.props;
+            const conditionResult = typeof condition === "boolean" && Boolean(condition);
 
-        if (conditionResult) {
-          matchChild = cloneElement(child, keys);
+            if (conditionResult) {
+              expressionMatched = true;
+            } else if (condition === expression) {
+              expressionMatched = true;
+            }
+            // handle switch fall through
+            if (expressionMatched && !breakReached) {
+              newChildrenArr = pushItemsToArray(newChildrenArr, child.props.children)
+            }
+            // handle break
+            if (expressionMatched) {
+              if (fallthrough) {
+                if (child.props.break) {
+                  breakReached = true;
+                }
+              } else {
+                breakReached = true;
+              }
+            }
+          } else if (Object.is(Default, child.type) && child.type.name === Default.name) {
+            defaultChildren = pushItemsToArray(defaultChildren, child.props.children)
+          }
+        });
+        // handle default case
+        if (!breakReached) {
+          newChildrenArr = [...newChildrenArr, ...defaultChildren]
         }
-      } else if (!defaultCase && child.type === Default) {
-        defaultCase = cloneElement(child, keys);
+        setChildrenToBeRendered(newChildrenArr);
       }
-    });
+    }
+  }, [children, expression]);
 
-  if (typeof expression !== "undefined") mapperChildrens();
-  else mapperChildrens(true);
-
-  return matchChild ?? defaultCase;
-};
-
-function Case({ children }: PropsOnlyOneChild<Conditiontype>) {
-  return Children.only(children);
-};
-function Default({ children }: PropsOnlyOneChild) {
-  return Children.only(children);
-};
-
-export {
-  Switch,
-  Case,
-  Default
+  return <>{childrenToBeRendered}</>;
 };
 
 
@@ -53,16 +66,15 @@ Switch.propTypes = {
     const prop = props[propName]
 
     let error = null
-    const onlyOneDefault = [];
     Children.forEach(prop, function (child) {
-      if ([Default].includes(child.type)) onlyOneDefault.push(child.type);
-      if (onlyOneDefault.length > 1) {
-        error = new Error(`'${componentName}' Only one 'Default' type element is acceptable.`);
-      }
-      if (![Case, Default].includes(child.type)) {
+      if (![Case.name, Default.name].includes(child.type.name)) {
         error = new Error(`'${componentName}' children should be of type 'Case' or 'Default'.`);
       }
     })
     return error
   }
 }
+
+export default memo(Switch, (prevProps: any, nextProps: any) => {
+  return (prevProps.expression === nextProps.expression && nextProps.enableMemo)
+});

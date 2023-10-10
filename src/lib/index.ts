@@ -1,4 +1,7 @@
-import { Switch as SwitchDefault, Case, Default } from "./Switch";
+import SwitchDefault from "./Switch";
+import Default from "./Default";
+import Case from "./Case";
+
 import type { SwitchComponents } from "./types";
 
 const SwitchTemp: any = SwitchDefault;

@@ -1,25 +1,19 @@
-import { MutableRefObject, FunctionComponentElement } from "react";
+import { MutableRefObject, PropsWithChildren } from "react";
 
-type Conditionstype = { expression?: string | number };
-type Conditiontype = { condition?: boolean | string | number };
-type Common<P = any> = {
+type Conditionstype = {
+  expression?: string | number;
+  fallthrough?: boolean;
+  enableMemo?: boolean;
+};
+type Conditiontype = { condition?: boolean | string | number; break?: boolean };
+
+type Props<P = NonNullable<object>> = PropsWithChildren<{
   ref?: MutableRefObject<any>;
-} & P;
-
-type Props<P = any> = {
-  children: FunctionComponentElement<P> | JSX.Element[];
-} & Common<P>;
-type PropsOnlyOneChild<P = any> = {
-  children: FunctionComponentElement<P>;
-} & Common<P>;
+} & P>;
 
 type SwitchComponents = ((props: Props<Conditionstype>) => JSX.Element) & {
-  Case: React.MemoExoticComponent<
-    (props: PropsOnlyOneChild<Conditiontype>) => JSX.Element | null
-  >;
-  Default: React.MemoExoticComponent<
-    (props: PropsOnlyOneChild) => JSX.Element | null
-  >;
+  Case: React.MemoExoticComponent<(props: Props<Conditiontype>) => JSX.Element>;
+  Default: React.MemoExoticComponent<(props: Props) => JSX.Element>;
 };
 
 export {
@@ -27,5 +21,4 @@ export {
   type Conditiontype,
   type Conditionstype,
   type SwitchComponents,
-  type PropsOnlyOneChild,
 };
